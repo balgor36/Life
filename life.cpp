@@ -15,7 +15,7 @@ WINDOW* win;
 int height, width, start_y, start_x;
 
 // food spawn rate 
-const float FOOD_RATE = 10.0f;
+const float FOOD_RATE = 40.0f;
 const float BOTS_RATE = 1.0f;
 
 void stats(){
@@ -70,10 +70,9 @@ int main(){
 
     int x_x = 0;
 
-    while(x_x < 200){
-//        int c = wgetch(win);
+    while(true){
         t2 = Clock::now();
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() > 100){
+        if(std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() > 50){
             x_x++;
             t1 = t2;
             werase(win);

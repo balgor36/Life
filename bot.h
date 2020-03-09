@@ -29,19 +29,9 @@ private:
 
     int sens;
 
-    float x_flt;
-    float y_flt;
-
-    int p_dir = -1;
-    int last_dir = -1;
-
     // tx, ty - food position
     int tx;
     int ty;
-    
-    // sx, sy - start position in the... 
-    int sx;
-    int sy;
 
     bool is_food_founded;
 

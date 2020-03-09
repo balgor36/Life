@@ -42,69 +42,35 @@ void Bot::setsens(int sesn){
 }
 
 void Bot::movetofood(std::list<Food>& food){
-    if(tx-pos.x != 0){
-        x_flt += 0.1f*((static_cast<float>(ty-pos.y))/(static_cast<float>(tx-pos.x)));
-//        y_flt = (((x_flt-sx)*(tx-sy))/(tx-sx)) + sy;
-        y_flt = ((x_flt-sx)*(ty-sy))/static_cast<float>(tx-sx) + sy;
-        
-    }
-    else{
-        if(pos.y > ty)
-            y_flt--;
-        else
-            y_flt++; 
-    }
-    
-    pos.x = static_cast<int>(x_flt);
-    pos.y = static_cast<int>(y_flt);
 
-    if(pos.y > ty){
-        if(pos.x > tx){
-            // первая четверть
-            p_dir = 1;
+    const int deltaX = abs(tx - pos.x);
+    const int deltaY = abs(ty - pos.y);
+    const int signX = pos.x < tx ? 1 : -1;
+    const int signY = pos.y < ty ? 1 : -1;
+    //
+    int error = deltaX - deltaY;
+    //
+    if(pos.x != tx || pos.y != ty) 
+    {
+        const int error2 = error * 2;
+        //
+        if(error2 > -deltaY) 
+        {
+            error -= deltaY;
+            pos.x += signX;
         }
-        else if(pos.x < tx){
-            // вторая четверть
-            p_dir = 2;
-        }
-        else if(pos.x == tx){
-            p_dir = 5;
-        }
-    } 
-    else if(pos.y < ty){
-        if(pos.x > tx){
-            // четвертая четверть
-            p_dir = 4;
-        }
-        else if(pos.x < tx){
-            // третья четверть
-            p_dir = 3;
-        }
-        else if(pos.x == tx){
-            p_dir = 7;
+        if(error2 < deltaX) 
+        {
+            error += deltaX;
+            pos.y += signY;
         }
     }
-    else if(pos.y == ty){
-        if(pos.x > tx){
-            p_dir = 8;
-        }
-        else if(pos.x < tx){
-            p_dir = 6;
-        }
-        else if(pos.x == tx){
-            p_dir = 0;
-        }
-    }
-
-    //if(pos.x == tx && pos.y == ty){
-    if(p_dir == 0 || last_dir != p_dir){
+    else if(pos.x == tx && pos.y == ty){
         is_food_founded = false;
-        tx = ty = sx = sy = x_flt = y_flt = -1;
+        tx = ty = -1;
         food.remove(*target_food);
-        //        food.erase(food.begin() + (target_food - &food[0]));
         target_food = nullptr;
     }
-    last_dir = p_dir;
 }
 
 void Bot::live(std::list<Food>& food){
@@ -112,8 +78,6 @@ void Bot::live(std::list<Food>& food){
         is_food_founded = findfood(food);
 
     if(is_food_founded){
-        x_flt = static_cast<float>(pos.x);
-        y_flt = static_cast<float>(pos.y);
         movetofood(food);
     }
 }
@@ -133,8 +97,6 @@ bool Bot::findfood(std::list<Food>& food){
                 preva = a;
                 tx = fx;
                 ty = fy;
-                sx = pos.x;
-                sy = pos.y;
                 is_found = true;
                 target_food = &i;
             }
