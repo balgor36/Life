@@ -21,11 +21,11 @@ public:
     int getsens();
     void draw(WINDOW** win) override;
     void setsens(int sens);
-    void live(std::list<Food>& food);
+    void live(std::set<std::shared_ptr<Food>>* foods);
     bool isfoodfounded();
 private:
-    bool findfood(std::list<Food>& food);
-    void movetofood(std::list<Food>& food);
+    bool findfood(std::set<std::shared_ptr<Food>>* foods);
+    void movetofood(std::set<std::shared_ptr<Food>>* foods);
 
     int sens;
 
@@ -35,7 +35,7 @@ private:
 
     bool is_food_founded;
 
-    Food* target_food;
+    std::weak_ptr<Food> target_food;
 };
 
 #endif

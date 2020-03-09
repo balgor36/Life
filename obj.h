@@ -5,6 +5,8 @@
 #define OBJ_COLOR 0
 
 #include <list>
+#include <set>
+#include <memory>
 #include <ncurses.h>
 
 struct vec{

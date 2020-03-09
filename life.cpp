@@ -10,13 +10,13 @@
 typedef std::chrono::high_resolution_clock Clock;
 
 std::vector<Bot> bots;
-std::list<Food> foods;
+std::set<std::shared_ptr<Food>> foods;
 WINDOW* win;
 int height, width, start_y, start_x;
 
 // food spawn rate 
-const float FOOD_RATE = 40.0f;
-const float BOTS_RATE = 1.0f;
+const float FOOD_RATE = 10.0f;
+const float BOTS_RATE = 3.0f;
 
 void stats(){
     mvwprintw(win, height-1, 1, "foods: %d | bots: %d", foods.size(), bots.size());
@@ -30,7 +30,7 @@ int main(){
 
     start_y = start_x = 0;
     getmaxyx(stdscr, height, width);
-
+    
     win = newwin(height, width, start_y, start_x);
 
     if(!has_colors()){
@@ -52,7 +52,7 @@ int main(){
         int x, y;
         x = rand() % (width-2) + 1;
         y = rand() % (height-2) + 1;
-        foods.push_back(Food(x, y));
+        foods.insert(std::make_shared<Food>(x, y));
     }
 
     bots.resize((width-1)*(height-1)*(BOTS_RATE/100.0f));
@@ -77,10 +77,10 @@ int main(){
             t1 = t2;
             werase(win);
             for(auto& food : foods)
-                food.draw(&win);
+                food->draw(&win);
             for(auto& bot : bots){
                 bot.draw(&win);
-                bot.live(foods);
+                bot.live(&foods);
             }
             box(win, 0, 0);
            

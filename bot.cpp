@@ -41,7 +41,7 @@ void Bot::setsens(int sesn){
     this->sens = sens;
 }
 
-void Bot::movetofood(std::list<Food>& food){
+void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
 
     const int deltaX = abs(tx - pos.x);
     const int deltaY = abs(ty - pos.y);
@@ -65,31 +65,36 @@ void Bot::movetofood(std::list<Food>& food){
             pos.y += signY;
         }
     }
-    else if(pos.x == tx && pos.y == ty){
+    if(!target_food.lock()){
         is_food_founded = false;
         tx = ty = -1;
-        food.remove(*target_food);
-        target_food = nullptr;
+        return;
+    }
+    if((pos.x == tx && pos.y == ty && target_food.lock())){
+        is_food_founded = false;
+        tx = ty = -1;
+        auto sp = target_food.lock();
+        foods->erase(sp);
     }
 }
 
-void Bot::live(std::list<Food>& food){
+void Bot::live(std::set<std::shared_ptr<Food>>* foods){
     if(!is_food_founded)
-        is_food_founded = findfood(food);
+        is_food_founded = findfood(foods);
 
     if(is_food_founded){
-        movetofood(food);
+        movetofood(foods);
     }
 }
 
-bool Bot::findfood(std::list<Food>& food){
+bool Bot::findfood(std::set<std::shared_ptr<Food>>* foods){
     bool is_found = false;
     int preva = -1;
     float a;
     int fx, fy;
-    for(auto& i : food){
-        fx = i.getx();
-        fy = i.gety();
+    for(auto& i : *foods){
+        fx = i->getx();
+        fy = i->gety();
 
         a = sqrt(pow(fx-pos.x,2)+pow(fy-pos.y, 2));
         if(a <= sens){
@@ -98,7 +103,7 @@ bool Bot::findfood(std::list<Food>& food){
                 tx = fx;
                 ty = fy;
                 is_found = true;
-                target_food = &i;
+                target_food = i;
             }
         }
     }
