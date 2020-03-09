@@ -43,7 +43,7 @@ int main(){
 
     init_pair(OBJ_COLOR, COLOR_BLACK, COLOR_BLUE);
     init_pair(BOT_COLOR, COLOR_BLACK, COLOR_GREEN); 
-    init_pair(FOOD_COLOR, COLOR_BLACK, COLOR_CYAN);
+    init_pair(FOOD_COLOR, COLOR_BLACK, COLOR_MAGENTA);
 
     init_pair(DIED_COLOR, COLOR_YELLOW, COLOR_BLACK);
 
