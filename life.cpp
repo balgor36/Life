@@ -16,7 +16,7 @@ int height, width, start_y, start_x;
 
 // food spawn rate 
 const float FOOD_RATE = 10.0f;
-const float BOTS_RATE = 3.0f;
+const float BOTS_RATE = 5.0f;
 
 void stats(){
     mvwprintw(win, height-1, 1, "foods: %d | bots: %d", foods.size(), bots.size());
@@ -44,6 +44,9 @@ int main(){
     init_pair(OBJ_COLOR, COLOR_BLACK, COLOR_BLUE);
     init_pair(BOT_COLOR, COLOR_BLACK, COLOR_GREEN); 
     init_pair(FOOD_COLOR, COLOR_BLACK, COLOR_CYAN);
+
+    init_pair(DIED_COLOR, COLOR_YELLOW, COLOR_BLACK);
+
     refresh();
 
     int food_size = (width-1)*(height-1)*(FOOD_RATE/100.0f);

@@ -28,9 +28,9 @@ bool Bot::isfoodfounded(){
 }
 
 void Bot::draw(WINDOW** win){
-    wattron(*win, COLOR_PAIR(BOT_COLOR));
+    wattron(*win, COLOR_PAIR(is_died ? DIED_COLOR : BOT_COLOR));
     mvwprintw(*win, pos.y, pos.x, name);
-    wattroff(*win, COLOR_PAIR(BOT_COLOR));
+    wattroff(*win, COLOR_PAIR(is_died ? DIED_COLOR : BOT_COLOR));
 }
 
 int Bot::getsens(){
@@ -42,7 +42,6 @@ void Bot::setsens(int sesn){
 }
 
 void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
-
     const int deltaX = abs(tx - pos.x);
     const int deltaY = abs(ty - pos.y);
     const int signX = pos.x < tx ? 1 : -1;
@@ -79,11 +78,21 @@ void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
 }
 
 void Bot::live(std::set<std::shared_ptr<Food>>* foods){
-    if(!is_food_founded)
-        is_food_founded = findfood(foods);
+    if(die_iters == TIME_TO_DIE){
+        is_died = true;
+        name = "d";
+    }
 
-    if(is_food_founded){
-        movetofood(foods);
+    if(!is_died){
+        if(!is_food_founded)
+            is_food_founded = findfood(foods);
+
+        if(is_food_founded){
+            movetofood(foods);
+        }
+        else{
+            die_iters++;
+        }
     }
 }
 

@@ -2,6 +2,10 @@
 #define BOT_H
 
 #define BOT_COLOR 1
+#define DIED_COLOR 3 
+
+// iteration to die without food
+#define TIME_TO_DIE 10
 
 #include <vector>
 #include <cmath>
@@ -26,6 +30,9 @@ public:
 private:
     bool findfood(std::set<std::shared_ptr<Food>>* foods);
     void movetofood(std::set<std::shared_ptr<Food>>* foods);
+    bool is_died = false;
+
+    int die_iters = 0;
 
     int sens;
 
