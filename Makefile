@@ -19,4 +19,4 @@ food: food.cpp
 	g++ $(FLAGS) -c -o food.o food.cpp
 
 clean:
-	rm -rf *.o $(TARGET)
+	rm -rf *.o *.out $(TARGET)

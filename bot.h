@@ -5,13 +5,14 @@
 #define DIED_COLOR 3 
 
 // iteration to die without food
-#define TIME_TO_DIE 10
+#define ENERGY_TO_REPRODUCE 10
 
 #include <vector>
 #include <cmath>
 #include <cassert>
 #include <cfloat>
 #include <iostream>
+#include <string>
 #include "obj.h"
 #include "food.h"
 
@@ -19,20 +20,22 @@ class Bot : public Obj {
 public:
     Bot();
     Bot(int x, int y);
+    Bot(const char* name, int x, int y);
     Bot(const char* name, int x, int y, int sens);
     ~Bot();
 
     int getsens();
     void draw(WINDOW** win) override;
     void setsens(int sens);
-    void live(std::set<std::shared_ptr<Food>>* foods);
+    void live(std::set<std::shared_ptr<Obj>>* foods);
     bool isfoodfounded();
+    bool isdied();
 private:
-    bool findfood(std::set<std::shared_ptr<Food>>* foods);
-    void movetofood(std::set<std::shared_ptr<Food>>* foods);
+    bool findfood(std::set<std::shared_ptr<Obj>>* foods);
+    void movetofood(std::set<std::shared_ptr<Obj>>* foods);
     bool is_died = false;
 
-    int die_iters = 0;
+    int energy = 5;
 
     int sens;
 
@@ -42,7 +45,7 @@ private:
 
     bool is_food_founded;
 
-    std::weak_ptr<Food> target_food;
+    std::weak_ptr<Obj> target_food;
 };
 
 #endif

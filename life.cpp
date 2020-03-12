@@ -10,7 +10,7 @@
 typedef std::chrono::high_resolution_clock Clock;
 
 std::vector<Bot> bots;
-std::set<std::shared_ptr<Food>> foods;
+std::set<std::shared_ptr<Obj>> foods;
 WINDOW* win;
 int height, width, start_y, start_x;
 
@@ -73,7 +73,7 @@ int main(){
 
     int x_x = 0;
 
-    while(true){
+    while(bots.size() > 0){
         t2 = Clock::now();
         if(std::chrono::duration_cast<std::chrono::milliseconds>(t2-t1).count() > 50){
             x_x++;
@@ -81,9 +81,14 @@ int main(){
             werase(win);
             for(auto& food : foods)
                 food->draw(&win);
-            for(auto& bot : bots){
-                bot.draw(&win);
-                bot.live(&foods);
+            for(std::vector<Bot>::iterator it = bots.begin(); it != bots.end(); ++it){
+                if(it->isdied()){
+                    bots.erase(it);
+                    it--;   
+                    continue;
+                }
+                it->draw(&win);
+                it->live(&foods);
             }
             box(win, 0, 0);
            

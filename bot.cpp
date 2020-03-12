@@ -12,6 +12,13 @@ Bot::Bot(int x, int y){
     sens = rand() % 15;
 }
 
+Bot::Bot(const char* name, int x, int y){
+    this->pos.x = x;
+    this->pos.y = y;
+    this->name = name;
+    sens = rand() % 15;
+}
+
 Bot::Bot(const char* name, int x, int y, int sens){
     this->pos.x = x;
     this->pos.y = y;
@@ -25,6 +32,10 @@ Bot::~Bot(){
 
 bool Bot::isfoodfounded(){
     return is_food_founded;
+}
+
+bool Bot::isdied(){
+    return is_died;
 }
 
 void Bot::draw(WINDOW** win){
@@ -41,7 +52,7 @@ void Bot::setsens(int sesn){
     this->sens = sens;
 }
 
-void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
+void Bot::movetofood(std::set<std::shared_ptr<Obj>>* foods){
     const int deltaX = abs(tx - pos.x);
     const int deltaY = abs(ty - pos.y);
     const int signX = pos.x < tx ? 1 : -1;
@@ -70,6 +81,7 @@ void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
         return;
     }
     if((pos.x == tx && pos.y == ty && target_food.lock())){
+        energy++;
         is_food_founded = false;
         tx = ty = -1;
         auto sp = target_food.lock();
@@ -77,13 +89,15 @@ void Bot::movetofood(std::set<std::shared_ptr<Food>>* foods){
     }
 }
 
-void Bot::live(std::set<std::shared_ptr<Food>>* foods){
-    if(die_iters == TIME_TO_DIE){
+void Bot::live(std::set<std::shared_ptr<Obj>>* foods){    
+    if(energy <= 0){
         is_died = true;
         name = "d";
+        //foods->insert(std::make_shared<Bot>(Bot(10, 2)));
     }
 
     if(!is_died){
+        static int iter;
         if(!is_food_founded)
             is_food_founded = findfood(foods);
 
@@ -91,12 +105,15 @@ void Bot::live(std::set<std::shared_ptr<Food>>* foods){
             movetofood(foods);
         }
         else{
-            die_iters++;
+            if(iter % 3 == 0){
+                energy--; 
+            }
         }
+        iter++;
     }
 }
 
-bool Bot::findfood(std::set<std::shared_ptr<Food>>* foods){
+bool Bot::findfood(std::set<std::shared_ptr<Obj>>* foods){
     bool is_found = false;
     int preva = -1;
     float a;
