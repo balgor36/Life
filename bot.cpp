@@ -52,7 +52,7 @@ void Bot::setsens(int sesn){
     this->sens = sens;
 }
 
-void Bot::movetofood(std::set<std::shared_ptr<Obj>>* foods){
+void Bot::movetofood(std::vector<std::shared_ptr<Obj>>* foods){
     const int deltaX = abs(tx - pos.x);
     const int deltaY = abs(ty - pos.y);
     const int signX = pos.x < tx ? 1 : -1;
@@ -85,11 +85,11 @@ void Bot::movetofood(std::set<std::shared_ptr<Obj>>* foods){
         is_food_founded = false;
         tx = ty = -1;
         auto sp = target_food.lock();
-        foods->erase(sp);
+        foods->erase(std::remove(foods->begin(), foods->end(), sp), foods->end());
     }
 }
 
-void Bot::live(std::set<std::shared_ptr<Obj>>* foods){    
+void Bot::live(std::vector<std::shared_ptr<Obj>>* foods){    
     if(energy <= 0){
         is_died = true;
         name = "d";
@@ -113,8 +113,9 @@ void Bot::live(std::set<std::shared_ptr<Obj>>* foods){
     }
 }
 
-bool Bot::findfood(std::set<std::shared_ptr<Obj>>* foods){
+bool Bot::findfood(std::vector<std::shared_ptr<Obj>>* foods){
     bool is_found = false;
+
     int preva = -1;
     float a;
     int fx, fy;

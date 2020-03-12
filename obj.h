@@ -4,8 +4,6 @@
 #define PI 3.14159265
 #define OBJ_COLOR 0
 
-#include <list>
-#include <set>
 #include <memory>
 #include <ncurses.h>
 

@@ -10,7 +10,7 @@
 typedef std::chrono::high_resolution_clock Clock;
 
 std::vector<Bot> bots;
-std::set<std::shared_ptr<Obj>> foods;
+std::vector<std::shared_ptr<Obj>> foods;
 WINDOW* win;
 int height, width, start_y, start_x;
 
@@ -55,7 +55,7 @@ int main(){
         int x, y;
         x = rand() % (width-2) + 1;
         y = rand() % (height-2) + 1;
-        foods.insert(std::make_shared<Food>(x, y));
+        foods.push_back(std::make_shared<Food>(x, y));
     }
 
     bots.resize((width-1)*(height-1)*(BOTS_RATE/100.0f));

@@ -9,10 +9,10 @@
 
 #include <vector>
 #include <cmath>
-#include <cassert>
 #include <cfloat>
 #include <iostream>
 #include <string>
+#include <algorithm> //std::remove
 #include "obj.h"
 #include "food.h"
 
@@ -27,12 +27,12 @@ public:
     int getsens();
     void draw(WINDOW** win) override;
     void setsens(int sens);
-    void live(std::set<std::shared_ptr<Obj>>* foods);
+    void live(std::vector<std::shared_ptr<Obj>>* foods);
     bool isfoodfounded();
     bool isdied();
 private:
-    bool findfood(std::set<std::shared_ptr<Obj>>* foods);
-    void movetofood(std::set<std::shared_ptr<Obj>>* foods);
+    bool findfood(std::vector<std::shared_ptr<Obj>>* foods);
+    void movetofood(std::vector<std::shared_ptr<Obj>>* foods);
     bool is_died = false;
 
     int energy = 5;
