@@ -1,3 +1,20 @@
+// Life simulation
+
+// Copyright (c) 2020 Gordey Balaban
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include <chrono>
 #include <cstdlib>
 #include <fstream>
@@ -15,8 +32,8 @@ WINDOW* win;
 int height, width, start_y, start_x;
 
 // food spawn rate 
-const float FOOD_RATE = 10.0f;
-const float BOTS_RATE = 5.0f;
+float FOOD_RATE = 10.0f;
+float BOTS_RATE = 3.0f;
 
 void stats(){
     mvwprintw(win, height-1, 1, "foods: %d | bots: %d", foods.size(), bots.size());
@@ -32,6 +49,14 @@ int main(){
     getmaxyx(stdscr, height, width);
     
     win = newwin(height, width, start_y, start_x);
+	
+	std::ifstream infile("config.txt");
+	if(!infile.is_open()){
+		infile.close();
+	}
+	else{
+		infile >> FOOD_RATE >> BOTS_RATE;
+	}
 
     if(!has_colors()){
         endwin();
