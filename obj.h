@@ -5,7 +5,7 @@
 #define OBJ_COLOR 0
 
 #include <memory>
-#include <ncurses.h>
+#include "pdcurses/curses.h"
 
 struct vec{
     int x = 0;

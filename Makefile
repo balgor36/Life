@@ -1,10 +1,10 @@
-FLAGS=-Wall -lncurses -pg -g
+FLAGS=-Wall -LC:\pdcurses\wincon -l:pdcurses.a
 TARGET=life
 
 .PHONY: clean
 
 all: life obj bot food
-	g++ $(FLAGS) life.o obj.o bot.o food.o -o $(TARGET)
+	g++ life.o obj.o bot.o food.o -o $(TARGET) $(FLAGS) 
 
 life: life.cpp
 	g++ $(FLAGS) -c -o life.o life.cpp

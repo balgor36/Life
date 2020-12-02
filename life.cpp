@@ -15,8 +15,8 @@ WINDOW* win;
 int height, width, start_y, start_x;
 
 // food spawn rate 
-const float FOOD_RATE = 10.0f;
-const float BOTS_RATE = 5.0f;
+float FOOD_RATE = 10.0f;
+float BOTS_RATE = 3.0f;
 
 void stats(){
     mvwprintw(win, height-1, 1, "foods: %d | bots: %d", foods.size(), bots.size());
@@ -32,6 +32,14 @@ int main(){
     getmaxyx(stdscr, height, width);
     
     win = newwin(height, width, start_y, start_x);
+	
+	std::ifstream infile("config.txt");
+	if(!infile.is_open()){
+		infile.close();
+	}
+	else{
+		infile >> FOOD_RATE >> BOTS_RATE;
+	}
 
     if(!has_colors()){
         endwin();
